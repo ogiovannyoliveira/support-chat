@@ -1,7 +1,10 @@
-import express from "express";
+import express from 'express';
+import './database';
 
 const app = express();
 
-app.listen(process.env.APP_PORT || 3333, () => {
-  console.log('Server already to launch on port %s! 🚀', 3333);
+const APP_PORT = process.env.APP_PORT || 3333;
+
+app.listen(APP_PORT, () => {
+  console.log('Server already to launch on port %s! 🚀', APP_PORT);
 })
