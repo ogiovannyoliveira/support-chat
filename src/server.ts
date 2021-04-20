@@ -1,10 +1,15 @@
 import express from 'express';
+import { ROUTER } from './routes'
 import './database';
 
-const app = express();
+const APP = express();
 
 const APP_PORT = process.env.APP_PORT || 3333;
 
-app.listen(APP_PORT, () => {
+APP.use(express.json());
+
+APP.use(ROUTER);
+
+APP.listen(APP_PORT, () => {
   console.log('Server already to launch on port %s! 🚀', APP_PORT);
-})
+});
