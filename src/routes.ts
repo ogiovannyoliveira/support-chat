@@ -1,12 +1,14 @@
-import { Request, Response, Router } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { Router } from 'express';
 import { SettingsController } from './controllers/SettingsController';
-import { SettingsRepository } from './repositories/SettingsRepository';
+import { UsersController } from './controllers/UsersController';
 
 const ROUTER = Router();
 
 const settingsController = new SettingsController();
+const usersController = new UsersController();
 
 ROUTER.post('/settings', settingsController.create);
+// 
+ROUTER.post('/users', usersController.create);
 
 export { ROUTER };
