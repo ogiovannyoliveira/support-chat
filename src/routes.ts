@@ -10,7 +10,9 @@ const usersController = new UsersController();
 const messagesController = new MessagesController();
 
 ROUTER.post('/settings', settingsController.create);
-// 
+ROUTER.get('/settings/:username', settingsController.findByUsername);
+ROUTER.put('/settings/:username', settingsController.update);
+//
 ROUTER.post('/users', usersController.create);
 //
 ROUTER.post('/messages', messagesController.create);
