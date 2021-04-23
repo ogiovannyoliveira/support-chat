@@ -15,6 +15,9 @@ APP.set('view engine', 'html');
 APP.get('/pages/client', (request, response) => {
   return response.render('html/client.html');
 })
+APP.get('/pages/admin', (request, response) => {
+  return response.render('html/admin.html');
+})
 
 const HTTP = createServer(APP);
 const WS = new Server(HTTP);

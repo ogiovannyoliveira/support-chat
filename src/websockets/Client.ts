@@ -13,7 +13,7 @@ WS.on('connect', (socket: Socket) => {
   const connectionsService = new ConnectionsService();
   const usersService = new UsersService();
   const messagesService = new MessagesService();
-  
+
   socket.on('client_first_access', async (params) => {
     const { text, email } = params as IParams;
     let user_id = null;
@@ -22,7 +22,7 @@ WS.on('connect', (socket: Socket) => {
 
     if (!userExists) {
       const user = await usersService.create({ email });
-      
+
       await connectionsService.create({
         socket_id: socket.id,
         user_id
@@ -43,9 +43,13 @@ WS.on('connect', (socket: Socket) => {
         connectionAlreadyExixts.socket_id = socket.id;
 
         await connectionsService.create(connectionAlreadyExixts);
-      }      
+      }
     }
 
-    await messagesService.create({ text, user_id })
+    await messagesService.create({ text, user_id });
+
+    const allMessages = await messagesService.listByUser(user_id);
+
+    socket.emit('client_list_all_messages', allMessages)
   })
 });
