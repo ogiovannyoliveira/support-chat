@@ -32,17 +32,17 @@ WS.on('connect', (socket: Socket) => {
     } else {
       user_id = userExists.id;
 
-      const connectionAlreadyExixts = await connectionsService.findByUserID(userExists.id);
+      const connectionAlreadyExists = await connectionsService.findByUserID(userExists.id);
 
-      if (!connectionAlreadyExixts) {
+      if (!connectionAlreadyExists) {
         await connectionsService.create({
           socket_id: socket.id,
           user_id
         });
       } else {
-        connectionAlreadyExixts.socket_id = socket.id;
+        connectionAlreadyExists.socket_id = socket.id;
 
-        await connectionsService.create(connectionAlreadyExixts);
+        await connectionsService.create(connectionAlreadyExists);
       }
     }
 
@@ -51,5 +51,27 @@ WS.on('connect', (socket: Socket) => {
     const allMessages = await messagesService.listByUser(user_id);
 
     socket.emit('client_list_all_messages', allMessages)
+
+    const allUsers = await connectionsService.findAllWithoutAdmin();
+
+    WS.emit('admin_list_all_users', allUsers);
+  })
+
+  socket.on('client_send_to_admin', async params => {
+    const { text, socket_admin_id } = params;
+
+    const socket_id = socket.id;
+
+    const { user_id } = await connectionsService.findBySocketID(socket_id);
+
+    const message = await messagesService.create({
+      text,
+      user_id
+    })
+
+    WS.to(socket_admin_id).emit('admin_receive_message', {
+      message,
+      socket_id
+    })
   })
 });

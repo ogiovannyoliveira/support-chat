@@ -30,7 +30,13 @@ export class ConnectionsService {
   }
 
   async findByUserID(user_id: string) {
-    const connection = this.connectionsRepository.findOne({ user_id })
+    const connection = this.connectionsRepository.findOne({ user_id });
+
+    return connection;
+  }
+
+  async findBySocketID(socket_id: string) {
+    const connection = this.connectionsRepository.findOne({ socket_id });
 
     return connection;
   }
@@ -39,8 +45,12 @@ export class ConnectionsService {
     const connection = this.connectionsRepository.find({
       where: { admin_id: null },
       relations: ['user']
-    })
+    });
 
     return connection;
+  }
+
+  async updateAdminID(user_id: string, admin_id: string) {
+    await this.connectionsRepository.update({ user_id }, { admin_id });
   }
 }
